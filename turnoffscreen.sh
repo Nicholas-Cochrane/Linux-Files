@@ -1,1 +1,2 @@
-/home/nicholas/Desktop/turnoffscreen.sh
+#!/bin/bash
+xset dpms force off

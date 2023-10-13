@@ -1,1 +1,134 @@
-/home/nicholas/Desktop/useful_commands.txt
+#UPGRADE (run both)
+sudo apt-get upgrade
+sudo apt-get dist-upgrade
+
+#run GUI
+startx
+#screen saver (turn off screen)
+xset dpms force off (Current Alias screenoff)
+
+#term programs
+screen
+    A^C^ Create Window
+    A^A^ Last window
+    A^N^ Next Window
+    A^P^ Prev Window
+    A^(shift + N) Show current window number
+top (CPU Usage)
+powerstat (power usage laptop only)
+iotop (IO/File usage)
+who -H
+ps (child process)
+ps -ef (all process)
+kill <PID> (terminate process)
+kill -9 <pid> (force kill process)
+ll (alias of ls -la)
+la ( alias of ls -a)
+date '+%Y-%m-%dT%T%Z' (<Year>-<Month>-<Day>T<TIME><ZONE>)
+<Comand>& (run as background job)
+
+#Term iont
+D^ EOiF (exit)
+Z^ Make background job
+   bg
+   jobs
+   fg <job number>
+
+
+##BASH
+
+#Custom Startup message
+
+if [[ $TERM = "linux" ]]
+then
+  echo ""
+  echo "Run startx to start GUI"
+fi
+
+#docker
+docker rm -f $(docker ps -q)
+
+#vim
+i -> insert mode before cursor
+a -> insert mode after cursor
+I (shift+i) -> insert start of line
+A (shift+a) -> insert end of line (A)ppend
+o -> insert mode new line bellow (o)pen
+O (shift+o) -> insert mode new line above (O)pen
+esc -> command mode
+   V (shift+v) -> linewise visual mode
+   v -> visual mode
+      y: yank selection (return to command mode)
+      d: delete selection (return to command mode)
+      <: (shift+,) shift selection left (return to command mode)
+      >: (shift+.) shift slection right (return to command mode)
+      ~: (shift+`) switch selection case (return to command mode)
+   Delete (register "" and "1)
+      dd: delete line 
+      dw: delete word to left
+      D (shift+d),d$: Delete all to the left 
+   Yank (register "" and "0)
+      yy: yank line
+      2yy: yank 2 lines
+      Y (shift+y),y$: yank all to left
+   Put (default register "")
+      p: put register after cursor/current line
+      P (shift+p): put register before cursor/current line
+   Registers (:reg) to view
+      "rp: put register 'r'
+      "ryy: yank line to register 'r'
+      "Ryy: append line to register 'r'
+      Named registers: a to z
+      ""p: put unamed register (last deleted or yanked text)
+      "1p: put last deleted
+      "0p: put last yanked
+      "+p: put from clipboard
+      "*p: put current mouse highlighted text
+      "%p: put current file name
+      ":p: put last command used
+      ".p: put last inserted (typed) text
+      also see ~,#,=,/,_,- for more complicated registers
+   Search
+      /pattern: search "pattern"
+      ?pattern: search "pattern" back from cursor
+      enter->
+         n: next
+	 N (shift+n): Previous
+      :[range]s/[old]/[new]/[flags] [count]: substitue
+          [range] none: curr line,   %: all lines in file,   4,7: lines 4,5,6,7
+	  [flags] g: global (every instance)
+	  [flags] c: confirm
+             y: yes
+	     n: no
+	     a: confirm all
+	     q: stop making changes
+	     l: last (y then q)
+	     ctrl+e: scroll screen one line up
+	     ctrl+y: scroll screen one line down
+      :%s/old/new/gc: find all 'old' and confirm replace with 'new'
+      :noh: clear search
+   Editing:
+      u: undo
+      ctrl+r: redo
+      .: repeat last command
+      >>: indent line right
+      <<: indent line left
+      r: replace single char
+      j: join line below to current line
+      hl jk: same as left.right  up,down arrows
+      w: next word
+      W (shift+w) next word (w/o punctuation)
+      b: back a word
+      B (shift+b) back a word (w/o punctuation)
+      e: end of word
+      E (shift+e): end of word (w/o punctuation)
+      0: start of line
+      $ (shift+4): end of line
+      ^ (shift+6): first char of line
+   Commands:
+      :w: save
+      :w [file.txt]: save as [file.txt]
+      :q: quit
+      :wq: save and quit
+      :q!: force quit (w/o saving)
+      
