@@ -10,6 +10,7 @@ services:
       - ~/docker_containers/jellyfin/config:/config
       - ~/docker_containers/jellyfin/cache:/cache
       - ~/Torrents:/media:ro
+      - /home/unencrypted_torrents:/unencrypted_media:ro
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
