@@ -4,6 +4,8 @@ services:
     container_name: jellyfin
     user: 997:100
     network_mode: 'host'
+    environment:
+      - TZ=America/Los_Angeles
     volumes:
       - ~/docker_containers/jellyfin/config:/config
       - ~/docker_containers/jellyfin/cache:/cache
@@ -11,6 +13,11 @@ services:
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    #Notes: May need to line 
+    #"Jellyfin.Networking.Manager.NetworkManager": "Warning"
+    #to logging.json under "Serilogs": { "MinimumLevel": { "Default": "Information", "Override": {
+    #to avoid spamming log file (docker compose logs -f)
+
   torrent:
     image: markusmcnugen/qbittorrentvpn
     container_name: qbittorrentvpn
