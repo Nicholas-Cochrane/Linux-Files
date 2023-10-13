@@ -25,8 +25,9 @@ services:
       - LAN_NETWORK=10.0.0.0/24
       - NAME_SERVERS=8.8.8.8,8.8.4.4
     volumes:
-      - ~/docker_containers/qbittorent/config:/config
+      - ~/docker_containers/qbittorent/config:/config #place vpn credentials in "config/openvpn/FILE_NAME.ovpn" under 'auth-user-pass'
       - ~/Torrents:/downloads
+      - /home/unencrypted_torrents:/unencrypted_downloads #home dir encryption leads to 143 byte name limit vs 255 byte
     ports:
       - 8080:8080
       - 8999:8999
