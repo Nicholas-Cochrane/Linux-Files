@@ -1,6 +1,6 @@
 #vim
 alias vim="nvim"
-alias svim="sudo nvim"
+alias svim="sudo -E -s nvim"
 
 #docker aliases
 alias dockercup="docker compose up -d"

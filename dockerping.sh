@@ -1,5 +1,6 @@
 #!/bin/sh
 idvar=$(docker ps | grep '   markusmcnugen/qbittorrentvpn' | awk '{print $1}')
+echo "[" $(date) "]"
 echo $idvar
 returnvar=$(docker exec $idvar bash -c "curl -Is  --connect-timeout 15 https://linuxhint.com/" | wc -c)
 if (( $returnvar > 0 )); then
