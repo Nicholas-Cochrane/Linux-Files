@@ -57,6 +57,7 @@ A (shift+a) -> insert end of line (A)ppend
 o -> insert mode new line bellow (o)pen
 O (shift+o) -> insert mode new line above (O)pen
 esc -> command mode
+ctrl+c -> command mode
    V (shift+v) -> linewise visual mode
    v -> visual mode
       y: yank selection (return to command mode)
@@ -67,11 +68,16 @@ esc -> command mode
    Delete (register "" and "1)
       dd: delete line 
       dw: delete word to left
+      diw: delete word cursor is on
       D (shift+d),d$: Delete all to the left 
    Yank (register "" and "0)
       yy: yank line
       2yy: yank 2 lines
       Y (shift+y),y$: yank all to left
+   Change
+      Prefrom Delete then insert
+      cc: delete line and start insert mode
+      ciw: delete word and start instert mode
    Put (default register "")
       p: put register after cursor/current line
       P (shift+p): put register before cursor/current line
@@ -90,6 +96,7 @@ esc -> command mode
       ".p: put last inserted (typed) text
       also see ~,#,=,/,_,- for more complicated registers
    Search
+      (In normal/command mode use */# to search next/prev of the word your cursor is on)
       /pattern: search "pattern"
       ?pattern: search "pattern" back from cursor
       enter->
@@ -107,7 +114,7 @@ esc -> command mode
 	     ctrl+e: scroll screen one line up
 	     ctrl+y: scroll screen one line down
       :%s/old/new/gc: find all 'old' and confirm replace with 'new'
-      :noh: clear search
+      :noh : clear search
    Editing:
       u: undo
       ctrl+r: redo
@@ -127,9 +134,18 @@ esc -> command mode
       $ (shift+4): end of line
       ^ (shift+6): first char of line
    Commands:
-      :w: save
-      :w [file.txt]: save as [file.txt]
-      :q: quit
-      :wq: save and quit
-      :q!: force quit (w/o saving)
+      :e Path/to/file
+      :e! ::force reload current file (good if undo tree is messed up but you saved)
+      :w ::save
+      :w [file.txt] ::save as [file.txt]
+      :q ::quit
+      :wq ::save and quit
+      :q! ::force quit (w/o saving)
       
+      :set ::set options
+      :set no<option> ::unset
+      :set <option>! ::toggle
+      :set <option>? ::return option value
+      :set <option>=<value> ::set option to value (can also use += and -=)
+
+      :set filetype? ::get current file type (ex: txt, cpp, sh)
