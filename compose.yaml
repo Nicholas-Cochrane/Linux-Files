@@ -1,4 +1,16 @@
 services:
+  nginxproxymanager:
+    image: 'jc21/nginx-proxy-manager:latest' 
+    container_name: nginxproxymanager
+    restart: unless-stopped 
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443' 
+    volumes:
+      - /home/nicholas/docker_containters/nginx/data:/data
+      - /home/nicholas/docker_containters/nginx/letsencrypt:/etc/letsencrypt 
+  
   jellyfin:
     image: jellyfin/jellyfin
     container_name: jellyfin
