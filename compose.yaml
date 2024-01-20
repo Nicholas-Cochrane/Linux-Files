@@ -59,7 +59,7 @@ services:
 networks:
   default:
     name: docker_containers_default
-    driver: brdige
+    driver: bridge
   db-network:
     name: db-network
     external: true
