@@ -10,6 +10,8 @@ services:
     volumes:
       - /home/nicholas/docker_containers/nginx/data:/data
       - /home/nicholas/docker_containers/nginx/letsencrypt:/etc/letsencrypt 
+    networks:
+      - db-network
   
   jellyfin:
     image: jellyfin/jellyfin
@@ -52,3 +54,8 @@ services:
       - 8999:8999
       - 8999:8999/udp
     restart: unless-stopped
+
+networks:
+  db-network:
+    name: db-network
+    external: true
