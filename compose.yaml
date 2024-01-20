@@ -12,6 +12,7 @@ services:
       - /home/nicholas/docker_containers/nginx/letsencrypt:/etc/letsencrypt 
     networks:
       - db-network
+      - default
   
   jellyfin:
     image: jellyfin/jellyfin
@@ -56,6 +57,9 @@ services:
     restart: unless-stopped
 
 networks:
+  default:
+    name: docker_containers_default
+    driver: brdige
   db-network:
     name: db-network
     external: true
