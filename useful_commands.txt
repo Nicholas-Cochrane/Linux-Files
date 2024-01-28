@@ -16,8 +16,10 @@ screen
     A^P^ Prev Window
     A^(shift + N) Show current window number
 top (CPU Usage)
-powerstat (power usage laptop only)
+powerstat (power usage laptop only battery only)
 iotop (IO/File usage)
+btop (CLI graph based cpu, io, network, etc top)
+pgcli (CLI postgres client with color and auto complete, like psql but more feedback)
 who -H
 ps (child process)
 ps -ef (all process)
