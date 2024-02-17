@@ -33,28 +33,55 @@ services:
     #to logging.json under "Serilogs": { "MinimumLevel": { "Default": "Information", "Override": {
     #to avoid spamming log file (docker compose logs -f)
 
-  torrent:
-    image: markusmcnugen/qbittorrentvpn
-    container_name: qbittorrentvpn
+  arch-torrent:
+    image: binhex/arch-qbittorrentvpn
+    container_name: qbittorrentvpn2
     privileged: true
     environment:
-      - TZ=America/Los_Angeles
+      - VPN_ENABLED=yes
+      - VPN_USER=$PIA_USERNAME
+      - VPN_PASS=$PIA_PASSWORD
+      - VPN_PROV=pia
+      - VPN_CLIENT=openvpn
+      - STRICT_PORT_FORWARD=yes
+      - ENABLE_PRIVOXY=yes
       - PUID=998
       - PGID=100
-      - WEBUI_PORT_ENV=8080
-      - INCOMING_PORT_ENV=8999
-      - VPN_ENABLED=yes
       - LAN_NETWORK=10.0.0.0/24
-      - NAME_SERVERS=8.8.8.8,8.8.4.4
+      - NAME_SERVERS=1.1.1.1,1.0.0.1
     volumes:
-      - ~/docker_containers/qbittorent/config:/config #place vpn credentials in "config/openvpn/FILE_NAME.ovpn" under 'auth-user-pass'
+      - /etc/localtime:/etc/localtime:ro
+      - ~/docker_containers/tempqbittorent/config:/config #place vpn credentials in "config/openvpn/FILE_NAME.ovpn" under 'auth-user-pass'
       - ~/Torrents:/downloads
       - /home/unencrypted_torrents:/unencrypted_downloads #home dir encryption leads to 143 byte name limit vs 255 byte
     ports:
       - 8080:8080
-      - 8999:8999
-      - 8999:8999/udp
-    restart: unless-stopped
+      - 8118:818
+      - 6881:6881
+      - 6881:6881/udp
+
+#  torrent:
+#    image: markusmcnugen/qbittorrentvpn
+#    container_name: qbittorrentvpn
+#    privileged: true
+#    environment:
+#      - TZ=America/Los_Angeles
+#      - PUID=998
+#      - PGID=100
+#      - WEBUI_PORT_ENV=8080
+#      - INCOMING_PORT_ENV=8999
+#      - VPN_ENABLED=yes
+#      - LAN_NETWORK=10.0.0.0/24
+#      - NAME_SERVERS=8.8.8.8,8.8.4.4
+#    volumes:
+#      - ~/docker_containers/qbittorent/config:/config #place vpn credentials in "config/openvpn/FILE_NAME.ovpn" under 'auth-user-pass'
+#      - ~/Torrents:/downloads
+#      - /home/unencrypted_torrents:/unencrypted_downloads #home dir encryption leads to 143 byte name limit vs 255 byte
+#    ports:
+#      - 8080:8080
+#      - 8999:8999
+#      - 8999:8999/udp
+#    restart: unless-stopped
 
 networks:
   default:
