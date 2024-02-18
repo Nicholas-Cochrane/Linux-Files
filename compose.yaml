@@ -34,7 +34,7 @@ services:
     #to avoid spamming log file (docker compose logs -f)
 
   arch-torrent:
-    image: binhex/arch-qbittorrentvpn
+    image: binhex/arch-qbittorrentvpn:4.6.2-2-01
     container_name: qbittorrentvpn2
     privileged: true
     restart: unless-stopped
@@ -47,19 +47,19 @@ services:
       - STRICT_PORT_FORWARD=yes
       - ENABLE_PRIVOXY=yes
       - WEBUI_PORT=8080
-      - UMASK=002
       - PUID=998
       - PGID=100
-      - LAN_NETWORK=10.i.0.0/24
+      - LAN_NETWORK=10.0.0.0/24
       - NAME_SERVERS=1.1.1.1,1.0.0.1
-      - DAEMON_LOG_LEVEL=info
-      - DELUGE_WEB_LOG_LEVEL=info
+      - DAEMON_LOG_LEVEL=debug
+      - DELUGE_WEB_LOG_LEVEL=debug
       - DELUGE_ENABLE_WEBUI_PASSWORD=yes
+      - DEBUG=true
     cap_add:
       - NET_ADMIN
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ~/docker_containers/qbittorent/config:/config #Remember to add openvpn opvn file (with out credentials added, use .evn)
+      - ~/docker_containers/qbittorrent/config:/config #Remember to add openvpn opvn file (with out credentials added, use .evn)
       - ~/Torrents:/downloads
       - /home/unencrypted_torrents:/unencrypted_downloads #home dir encryption leads to 143 byte name limit vs 255 byte
     ports:
@@ -67,6 +67,8 @@ services:
       - 8118:8118
       - 6881:6881
       - 6881:6881/udp
+    networks:
+      - default
 
 #  torrent:
 #    image: markusmcnugen/qbittorrentvpn
@@ -91,6 +93,81 @@ services:
 #      - 8999:8999/udp
 #    restart: unless-stopped
 
+
+#
+# The Firefly III Data Importer will ask you for the Firefly III URL and a "Client ID".
+# You can generate the Client ID at http://localhost/profile (after registering)
+# The Firefly III URL is: http://app:8080
+#
+# Other URL's will give 500 | Server Error
+#
+
+  firefly:
+    image: fireflyiii/core:latest
+    hostname: firefly
+    container_name: firefly_iii_core
+    networks:
+      - firefly_iii
+      - default
+    restart: always
+    volumes:
+      - ~/docker_containers/firefly_iii_upload:/var/www/html/storage/upload
+    env_file: .ff.env 
+    environment:
+      - UMASK=002
+      - PUID=994
+      - PGID=100
+    ports:
+      - '28081:8080'
+    depends_on:
+      - ffdb
+  ffdb:
+    image: mariadb
+    hostname: ffdb
+    container_name: firefly_iii_db
+    networks:
+      - firefly_iii
+      - default
+    restart: always
+    env_file: .db.env
+    environment:
+      - UMASK=002
+      - PUID=994
+      - PGID=100
+    volumes:
+      - ~/docker_containers/firefly_iii_db:/var/lib/mysql
+
+  importer:
+    image: fireflyiii/data-importer:latest
+    hostname: importer
+    restart: always
+    container_name: firefly_iii_importer
+    networks:
+      - firefly_iii
+      - default
+    ports:
+      - '28082:8080'
+    depends_on:
+      - firefly
+    env_file: .importer.env
+    environment:
+      - UMASK=002
+      - PUID=994
+      - PGID=100
+
+  cron:
+    #
+    # To make this work, set STATIC_CRON_TOKEN in your .env file or as an environment variable and replace REPLACEME below
+    # The STATIC_CRON_TOKEN must be *exactly* 32 characters long
+    #
+    image: alpine
+    container_name: firefly_iii_cron
+    restart: always
+    command: sh -c "echo \"0 3 * * * wget -qO- http://firefly:8080/api/v1/cron/Ttj3ociwONQje0H2PtIPVjJdGXaGgAqn\" | crontab - && crond -f -L /dev/stdout"
+    networks:
+      - firefly_iii
+      - default
+
 networks:
   default:
     name: docker_containers_default
@@ -98,3 +175,5 @@ networks:
   db-network:
     name: db-network
     external: true
+  firefly_iii:
+    driver: bridge
